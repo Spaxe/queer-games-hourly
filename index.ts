@@ -50,6 +50,7 @@ async function tweet(row: any) {
   // skip games with no name or URLs
   try {
     if (!row.Game || !row.URL) {
+      storage.setItem("index", ++index);
       return;
     }
     let mediaId = null;
