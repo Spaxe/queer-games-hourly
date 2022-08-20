@@ -1,9 +1,13 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "ESM",
+
   "compilerOptions": {
-    "sourceMap": true,
-    "outDir": "dist",
+    "module": "es2022",
+    "target": "es2022",
     "strict": true,
-    "lib": ["esnext"],
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "lib": ["es2022"]
   }
 }

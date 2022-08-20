@@ -3,22 +3,28 @@
   "version": "1.0.0",
   "description": "one queer game every hour",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "start": "ts-node index.ts",
+    "start": "node --loader ts-node/esm index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "queer",
-    "games",
-    "lgbt"
+    "itch.io",
+    "twitter",
+    "research"
   ],
   "author": "Xavier Ho",
   "license": "MIT",
   "dependencies": {
+    "@prisma/client": "^4.2.1",
+    "csv": "^6.2.0",
     "dotenv": "^16.0.1",
     "fast-csv": "^4.3.6",
     "node-fetch": "^2.6.7",
+    "node-html-parser": "^5.4.2-0",
     "node-localstorage": "^2.2.1",
+    "node-vibrant": "^3.1.6",
+    "sleep-promise": "^9.1.0",
     "ts-node": "^10.7.0",
     "twitter": "^1.7.1",
     "twitter-api-client": "^1.5.2",

@@ -23,17 +23,17 @@ model Game {
   colourMuted        String?
   colourMutedDark    String?
   colourMutedLight   String?
-  price              String
+  price              String?
   currency           String?
   description        String
   creator            String?
-  creatorProfileUrl  String?
   status             String?
   platforms          String?
   publisher          String?
   rating             Decimal?
   ratingCount        Int?
-  author             String?
+  author             String
+  authorProfileUrl   String
   genre              String?
   madeWith           String?
   tags               String?
