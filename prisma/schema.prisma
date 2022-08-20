@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Game {
+  id                 Int       @id @default(autoincrement())
+  gameId             Int       @unique
+  url                String    @unique
+  thumbnailUrl       String?
+  thumbnail          Bytes?
+  name               String
+  colourVibrant      String?
+  colourVibrantDark  String?
+  colourVibrantLight String?
+  colourMuted        String?
+  colourMutedDark    String?
+  colourMutedLight   String?
+  price              String
+  currency           String?
+  description        String
+  creator            String?
+  creatorProfileUrl  String?
+  status             String?
+  platforms          String?
+  publisher          String?
+  rating             Decimal?
+  ratingCount        Int?
+  author             String?
+  genre              String?
+  madeWith           String?
+  tags               String?
+  averageSession     String?
+  languages          String?
+  inputs             String?
+  accessibility      String?
+  links              String?
+  multiplayer        String?
+  gameUpdatedAt      DateTime?
+  gamePublishedAt    DateTime?
+  gameReleasedAt     DateTime?
+  updatedAt          DateTime  @updatedAt
+  queerGamesHourly   Boolean   @default(false)
+}
