@@ -28,7 +28,7 @@ export const getGameListByTag = async (tag: string) => {
       // parse search result page
       gameCells.forEach((game) => {
         games.push({
-          gameId: Number(game.getAttribute("data-game_id")) || -1,
+          gameId: Number(game.getAttribute("data-game_id")),
           url: game.querySelector("a.game_link")?.getAttribute("href") || "",
           thumbnailUrl:
             game
@@ -36,8 +36,8 @@ export const getGameListByTag = async (tag: string) => {
               ?.getAttribute("data-lazy_src") || "",
           name: game.querySelector(".title")?.text || "",
           description: game.querySelector(".game_text")?.text || "",
-          author: game.querySelector(".game_author")?.text || "",
-          authorProfileUrl:
+          creator: game.querySelector(".game_author")?.text || "",
+          creatorProfileUrl:
             game.querySelector(".game_author a")?.getAttribute("href") || "",
         });
       });
@@ -46,8 +46,7 @@ export const getGameListByTag = async (tag: string) => {
       process.stdout.write(`Got ${numItems} items from page ${page} ...\n`);
       page++;
 
-      sleep(1000);
-      break;
+      await sleep(250);
     } catch (err) {
       process.stderr.write(JSON.stringify(err, null, 2));
       break;
@@ -66,23 +65,94 @@ export const getGameMoreDetails = async (game: Prisma.GameCreateInput) => {
     // Save the more info faithfully
     dom.querySelectorAll(".game_info_panel_widget tr").forEach((row) => {
       const key = row.querySelector("td:first-child")?.text || "";
+      let date;
 
       switch (key) {
-        case "Status":
-          game.status = row.querySelector("td:last-child")?.text?.trim() || "";
-          break;
         case "Updated":
-          let date = new Date(
+          game.gameReleasedAt = new Date(
             row
               .querySelector("td:last-child abbr")
               ?.getAttribute("title")
               ?.split("@")[0] || ""
           );
-          if (date) {
-            game.gameUpdatedAt = date;
-          }
+        case "Published":
+          game.gamePublishedAt = new Date(
+            row
+              .querySelector("td:last-child abbr")
+              ?.getAttribute("title")
+              ?.split("@")[0] || ""
+          );
+          break;
+        case "Release date":
+          game.gameReleasedAt = new Date(
+            row
+              .querySelector("td:last-child abbr")
+              ?.getAttribute("title")
+              ?.split("@")[0] || ""
+          );
+          break;
+        case "Rating":
+          game.rating =
+            row.querySelector(".aggregate_rating")?.getAttribute("title") || "";
+          game.ratingCount =
+            Number(
+              row.querySelector(".rating_count")?.getAttribute("content")
+            ) || 0;
+          break;
+        case "Links":
+          game.links = row
+            .querySelectorAll("a")
+            .map((link) => link.getAttribute("href"))
+            .join(", ");
+          break;
+        case "Mentions":
+          game.mentions = row
+            .querySelectorAll("a")
+            .map((link) => link.getAttribute("href"))
+            .join(", ");
+          break;
+        case "Status":
+          game.status = row.querySelector("td:last-child")?.text?.trim() || "";
+          break;
+        case "Platforms":
+          game.platforms =
+            row.querySelector("td:last-child")?.text?.trim() || "";
+          break;
+        case "Publisher":
+          game.publisher =
+            row.querySelector("td:last-child")?.text?.trim() || "";
+          break;
+        case "Author":
+        case "Authors":
+          game.author = row.querySelector("td:last-child")?.text?.trim() || "";
+          break;
+        case "Genre":
+          game.genre = row.querySelector("td:last-child")?.text?.trim() || "";
+          break;
+        case "Made with":
+          game.madeWith =
+            row.querySelector("td:last-child")?.text?.trim() || "";
+          break;
+        case "Tags":
+          game.tags = row.querySelector("td:last-child")?.text?.trim() || "";
+          break;
+        case "Average session":
+          game.averageSession =
+            row.querySelector("td:last-child")?.text?.trim() || "";
+          break;
+        case "Languages":
+          game.languages =
+            row.querySelector("td:last-child")?.text?.trim() || "";
+          break;
+        case "Inputs":
+          game.inputs = row.querySelector("td:last-child")?.text?.trim() || "";
+          break;
+        case "Accessibility":
+          game.accessibility =
+            row.querySelector("td:last-child")?.text?.trim() || "";
           break;
         default:
+          console.warn(`Unknown key: ${key}`);
           break;
       }
     });

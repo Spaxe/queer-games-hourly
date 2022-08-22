@@ -1,42 +1,41 @@
-import { prisma, Prisma, PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
+import sleep from "sleep-promise";
 
-export async function updateGames(games: Prisma.GameCreateInput[]) {
+export async function createOrUpdateGames(games: Prisma.GameCreateInput[]) {
   const prisma = new PrismaClient();
 
-  await Promise.all(
-    games.map(async (game) => {
-      let result;
+  games.forEach(async (game) => {
+    try {
+      await prisma.game.create({
+        data: game,
+      });
+      await sleep(10);
+    } catch (e) {
+      // do nothing, let it go
+    }
+  });
 
-      try {
-        result = await prisma.game.update({
-          where: { gameId: game.gameId },
-          data: game,
-        });
-      } catch (error) {
-        console.error(error);
-      }
-
-      if (!result) {
-        try {
-          result = await prisma.game.create({
-            data: game,
-          });
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    })
-  );
+  games.forEach(async (game) => {
+    try {
+      await prisma.game.update({
+        where: { gameId: game.gameId },
+        data: game,
+      });
+      await sleep(10);
+    } catch (e) {
+      console.error("error: ", game.gameId, game.name, e);
+    }
+  });
 
   await prisma.$disconnect();
 }
 
-// export async function findAllGames() {
-//   const prisma = new PrismaClient();
+export async function countGames() {
+  const prisma = new PrismaClient();
 
-//   try {
-//     return await prisma.game.findMany();
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
+  const count = await prisma.game.count();
+  console.log(`There are ${count} queer games in the database.`);
+
+  await prisma.$disconnect();
+  return count;
+}

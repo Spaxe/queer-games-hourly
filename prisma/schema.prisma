@@ -16,7 +16,7 @@ model Game {
   url                String    @unique
   thumbnailUrl       String?
   thumbnail          Bytes?
-  name               String
+  name               String?
   colourVibrant      String?
   colourVibrantDark  String?
   colourVibrantLight String?
@@ -25,15 +25,15 @@ model Game {
   colourMutedLight   String?
   price              String?
   currency           String?
-  description        String
+  description        String?
   creator            String?
+  creatorProfileUrl  String?
   status             String?
   platforms          String?
   publisher          String?
   rating             Decimal?
   ratingCount        Int?
-  author             String
-  authorProfileUrl   String
+  author             String?
   genre              String?
   madeWith           String?
   tags               String?
@@ -42,6 +42,7 @@ model Game {
   inputs             String?
   accessibility      String?
   links              String?
+  mentions           String?
   multiplayer        String?
   gameUpdatedAt      DateTime?
   gamePublishedAt    DateTime?
